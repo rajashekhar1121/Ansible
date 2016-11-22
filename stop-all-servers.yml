@@ -1,0 +1,8 @@
+- name: Apache Tomcat Installation
+  hosts: all
+  remote_user: mradmin
+
+  tasks:
+  - become: yes
+    service: name=tomcat state=stopped
+

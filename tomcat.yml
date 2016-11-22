@@ -1,0 +1,84 @@
+---
+#################################################################
+# 
+# ESL Grid Playbook
+# Install Apache Tomcat cluster from an Ansible playbook.  This
+# playbook will install the Java runtime, Tomcat binaries and 
+# then start the server.
+# 
+# Run: ansible-playbook tomcat.yml -i hosts -f 8
+#
+# Notes: The installation and server startup is done using mradmin
+# user who has sudo with NOPASS privs.  Please be cautious when 
+# using this user.  
+# 
+# Author: M. Garcia
+#################################################################
+#- include: ../elasticsearch/install_jdk8-pb.yml
+- name: Apache Tomcat Installation
+  hosts: all
+  remote_user: mradmin
+  vars:
+    version: "8.0.23"
+    tc_tarball: "apache-tomcat-{{version}}.tar.gz"
+
+  tasks:
+  - name: Update limits.conf
+    become: yes
+    shell: echo -e "mradmin\tsoft\tnofile\t131072\nmradmin\thard\tnofile\t131072\nmradmin\tsoft\tmemlock\tunlimited\nmradmin\thard\tmemlock\tunlimited\n" > /etc/security/limits.conf.tmp
+
+  - name: Backup move 1 - save off limits.conf to limits.conf.orig
+    become: yes
+    shell: "if [ ! -f /etc/security/limits.conf.orig ]; then cp /etc/security/limits.conf /etc/security/limits.conf.orig; fi"
+
+  - name: Backup move 2
+    become: yes
+    shell: cp /etc/security/limits.conf.orig /etc/security/limits.conf
+
+  - name: Backup move 3
+    become: yes
+    shell: cat /etc/security/limits.conf.tmp >> /etc/security/limits.conf
+
+  - name: Remove tmp file
+    become: yes
+    shell: rm /etc/security/limits.conf.tmp 
+
+  - name: Ensure no stray processes before install | reinstall
+    shell: pkill -u mradmin java
+    ignore_errors: yes
+
+  - name: Copy tomcat tarball
+    get_url: url=https://atlas.sys.comcast.net/APS-SEL2E-Engineering/APS-SEL2E-Engineering/noarch/7/esl/{{tc_tarball}}
+     dest=~/{{tc_tarball}}
+     validate_certs=no
+
+  - file: path=/app/tomcat/{{version}} state=absent
+#  - shell: rm -rf /app/tomcat/{{version}} 
+
+
+  - shell: mkdir -p /app/tomcat/{{version}} chdir=~/
+
+  - shell: tar xzf {{tc_tarball}} -C /app/tomcat/{{version}} chdir=~/
+
+  - shell: mv /app/tomcat/{{version}}/$(echo {{tc_tarball}} | sed -e 's/\(.*\).tar.gz/\1/')/* /app/tomcat/{{version}}/ chdir=/app/tomcat/{{version}}/
+
+  - shell: rmdir /app/tomcat/{{version}}/$(echo {{tc_tarball}} | sed -e 's/\(.*\).tar.gz/\1/')
+
+  - name: Make tomcat a service
+    become: yes
+    template: src=../templates/tomcat_service.j2 dest=/etc/init.d/tomcat
+     owner=mradmin group=mradmin mode=0774 backup=yes
+     
+  - become: yes
+    become_user: root
+    shell: chkconfig --add tomcat chdir=/etc/init.d/
+
+  - become: yes
+    become_user: root
+    shell: chkconfig --level 2345 tomcat on chdir=/etc/init.d/
+
+  - become: yes
+    service: name=tomcat state=restarted enabled=yes
+  - pause: seconds=3
+  - name: Check server listening on configured http port (default; 8080)
+    shell: nc 127.0.0.1 8080 </dev/null

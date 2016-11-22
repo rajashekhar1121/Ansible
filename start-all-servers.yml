@@ -1,0 +1,18 @@
+- name: Start Apache Tomcat servers
+  hosts: all
+  remote_user: mradmin
+
+  tasks:
+  - name: Ensure no stray processes before install | reinstall
+    become: yes
+    shell: for pid in $(ps -ef | grep mradmin | grep -v pts | awk '{print $2}'); do kill -9 $pid; done
+    ignore_errors: yes
+
+  - name: Starting tomcat servers
+    become: yes
+    service: name=tomcat state=restarted enabled=yes
+
+  - pause: seconds=4
+  - name: Check server listening on configured http port (default; 8080)
+    shell: nc 127.0.0.1 8080 </dev/null
+

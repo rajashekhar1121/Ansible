@@ -1,0 +1,26 @@
+[as-tomcat]
+eslthap-as-a[1:4]p.sys.comcast.net site=AS
+eslasap-as-a[1:4]p.sys.comcast.net site=AS
+
+[as-tomcat:vars]
+couch_vip=http://esl-cb-as-lb.sys.comcast.net:8091/pools 
+
+#http://eslthcb-as-a1p.sys.comcast.net:8091,http://eslthcb-as-a2p.sys.comcast.net:8091,http://eslthcb-as-a3p.sys.comcast.net:8091,http://eslthcb-as-a4p.sys.comcast.net:8091,http://eslthcb-as-a5p.sys.comcast.net:8091,http://eslascb-as-a1p.sys.comcast.net:8091,http://eslascb-as-a2p.sys.comcast.net:8091,http://eslascb-as-a3p.sys.comcast.net:8091,http://eslascb-as-a4p.sys.comcast.net:8091,http://eslascb-as-a5p.sys.comcast.net:8091
+	
+[ch-tomcat]
+eslthap-ch2-a[1:4]p.sys.comcast.net site=CH
+eslasap-ch2-a[1:4]p.sys.comcast.net site=CH
+
+[ch-tomcat:vars]
+couch_vip=http://esl-cb-ch-lb.sys.comcast.net:8091/pools 
+
+#http://eslthcb-ch2-a1p.sys.comcast.net:8091,http://eslthcb-ch2-a2p.sys.comcast.net:8091,http://eslthcb-ch2-a3p.sys.comcast.net:8091,http://eslthcb-ch2-a4p.sys.comcast.net:8091,http://eslthcb-ch2-a5p.sys.comcast.net:8091,http://eslascb-ch2-a1p.sys.comcast.net:8091,http://eslascb-ch2-a2p.sys.comcast.net:8091,http://eslascb-ch2-a3p.sys.comcast.net:8091,http://eslascb-ch2-a4p.sys.comcast.net:8091,http://eslascb-ch2-a5p.sys.comcast.net:8091
+
+[po-tomcat]
+eslthap-po-a[1:4]p.sys.comcast.net site=PO
+eslasap-po-a[1:4]p.sys.comcast.net site=PO
+
+[po-tomcat:vars]
+couch_vip=http://esl-cb-po-lb.sys.comcast.net:8091/pools 
+
+#http://eslthcb-po-a1p.sys.comcast.net:8091,http://eslthcb-po-a2p.sys.comcast.net:8091,http://eslthcb-po-a3p.sys.comcast.net:8091,http://eslthcb-po-a4p.sys.comcast.net:8091,http://eslthcb-po-a5p.sys.comcast.net:8091,http://eslascb-po-a1p.sys.comcast.net:8091,http://eslascb-po-a2p.sys.comcast.net:8091,http://eslascb-po-a3p.sys.comcast.net:8091,http://eslascb-po-a4p.sys.comcast.net:8091,http://eslascb-po-a5p.sys.comcast.net:8091
