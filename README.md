@@ -8,9 +8,6 @@ Install Tomcat Cluster
 
 The TC hosts file. 
 
-This file contains 6 groups of servers:
-[(ch|as|po)-tomcat] - Chicago|Potomac|Ashburn DC specific nodes
-
 
 Run the Ansible command
 <pre>
