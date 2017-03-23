@@ -35,12 +35,4 @@ Run the Ansible command
 ansible-playbook -i hosts tomcat-uninstall.yml -f 16
 </pre>
 
-NOTES:
--------
 
-In some environments the Apache commons-codec causes a classpath conflict due to a library conflict with the Enterprise Geocoder g1ClientSDK.  It uses an oudated commons-codec and when the Base64 class from it is loaded first, the attemptive REST call fails with NoSuchMethod error.  To fix download at least the commons-codec-1.5.jar and append to bootclasspath by editing the catalina.sh script on the affected system:
-<pre>
--Xbootclasspath/a:<jar_dir>/commons-codec-1.5.jar \
-</pre>
-
-This will allow the server to start normally.  The old g1ClientSDK will work with a newer codec library.  
